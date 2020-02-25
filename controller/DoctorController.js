@@ -42,6 +42,23 @@ doctorRouter.route("/").post((req, res) => {
     });
 });
 
+// Authenticate a Doctor
+doctorRouter.route("/auth").post((req, res) => {
+    DOCTOR.findOne({username: req.body.username}, (err, result) => {
+        if (err || !result) {
+            res.status(404).send();
+        } else {
+            bcrypt.compare(req.body.password, result.password, (err, isValid) => {
+                if (isValid) {
+                    res.status(200).json(result);
+                } else {
+                    res.status(404).send();
+                }
+            });
+        }
+    });
+});
+
 // Modify a doctor alltogether
 doctorRouter.route("/:id").put((req, res) => {
     DOCTOR.findById(req.params.id, (err, result) => {
