@@ -44,6 +44,10 @@ patientRouter.route("/:id").get((req, res) => {
 // Create a new Patient
 patientRouter.route("/").post((req, res) => {
     let patient = new PATIENT(req.body);
+
+    // Creation date assigned on server-side
+    patient.dateCreated = new Date();
+    
     patient.save().then(saved => {
         res.status(201).json(saved);
     }).catch(err => {
@@ -75,3 +79,5 @@ patientRouter.route("/:id").delete((req, res) => {
         }
     });
 });
+
+module.exports = patientRouter;

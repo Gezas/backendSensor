@@ -7,6 +7,7 @@ mongoose = require('mongoose'),
 cors = require('cors');
 
 const patientController = require('./controller/PatientController');
+const doctorController = require('./controller/DoctorController');
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -25,6 +26,7 @@ mongoose.set("useFindAndModify", false);
 
 // Controllers
 app.use('/api/patients', patientController);
+app.use('/api/doctors', doctorController);
 
 app.listen(app.get("port"), () => {
     console.log(`CSISD Backend running on port ${app.get("port")}`);
