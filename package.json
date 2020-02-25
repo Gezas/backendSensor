@@ -1,0 +1,23 @@
+{
+  "name": "csisd-backend",
+  "version": "1.0.0",
+  "description": "Backend for CSISD Assignment",
+  "main": "Server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "D.Jackevicius, S.Alexandrou, K.Panteli, Z.Nagy",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^4.0.0",
+    "chai": "^4.2.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mocha": "^7.0.1",
+    "mockgoose": "^8.0.4",
+    "mongo-seeding": "^3.4.0-alpha.1",
+    "mongoose": "^5.9.2",
+    "nodemon": "^2.0.2",
+    "supertest": "^4.0.2"
+  }
+}
