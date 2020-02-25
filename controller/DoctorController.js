@@ -89,7 +89,7 @@ doctorRouter.route("/addPatient/:patientID/to/:doctorID").put((req, res) => {
                 return;
             }
 
-            doctor.patients.push(patient);
+            doctor.patients.push(patient._id);
             doctor.save().then(saved => {
                 res.status(200).json(saved);
             }).catch(err => {

@@ -1,7 +1,6 @@
 "use strict";
 
 const mongoose = require('mongoose');
-const patientModel = require('./PatientModel');
 
 const doctorSchema = new mongoose.Schema({
     username: {
@@ -25,7 +24,7 @@ const doctorSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
-    patients: [patientModel]
+    patients: [mongoose.Schema.Types.ObjectId]
 });
 
 module.exports = mongoose.model("doctor", doctorSchema);
