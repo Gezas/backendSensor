@@ -59,7 +59,7 @@ patientRouter.route("/").post((req, res) => {
 patientRouter.route("/:id").put((req, res) => {
     PATIENT.findById(req.params.id, (err, result) => {
         result.fullName = req.body.fullName;
-        result.dob = req.body.fullName;
+        result.dob = req.body.dob;
 
         result.save().then(saved => {
             res.status(200).json(saved);
