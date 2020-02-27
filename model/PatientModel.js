@@ -2,6 +2,21 @@
 
 const mongoose = require('mongoose');
 
+const healthDataSchema = new mongoose.Schema({
+    heartRate: {
+        type: Number,
+        required:true
+    },
+    bloodPressure: {
+        type: Number,
+        required:true
+    },
+    timeStamp: {
+        type: Date,
+        required:true
+    }
+});
+
 const patientSchema = new mongoose.Schema({
     fullName: {
         type: String,
@@ -16,7 +31,7 @@ const patientSchema = new mongoose.Schema({
         required: true
     },
     healthData: {
-        type: [mongoose.Schema.Types.ObjectId]
+        type: [healthDataSchema]
     },
     deviceId:{
         type: String

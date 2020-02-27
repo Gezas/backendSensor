@@ -16,14 +16,19 @@ app.use(express.json());
 app.set("port", process.env.PORT || 5000);
 
 // Mongoose
-mongoose.connect(
-    "mongodb://localhost:27017/csisddb",
-    { useNewUrlParser: true,
-    useUnifiedTopology: true }
-);
-mongoose.set("useCreateIndex", true);
-mongoose.set("useFindAndModify", false);
+if (process.env.NODE_ENV !== 'test') {
+    const mongooseOpts = {
+        useNewUrlParser: true,
+        useFindAndModify: false,
+        useUnifiedTopology: true,
+        useCreateIndex: true
+    };
+    mongoose.connect("mongodb://localhost:27017/csisddb", mongooseOpts)
+        .then((res, err) => {
+            if (err) console.log("error connecting to database");
+        })
 
+    }
 // Controllers
 app.use('/api/patients', patientController);
 app.use('/api/doctors', doctorController);
