@@ -14,7 +14,7 @@ let interval = setInterval(function() {
   
 
   let postData = setInterval(function() {
-    axios.post('http://localhost:5000/api/patients/data', {deviceId: DEVICEID, healthData: healthData})
+    axios.post('http://localhost:5000/api/patients/data', {deviceId: DEVICEID, healthData: data})
         .then(res => {
             console.log(res.data);
             data = [];
