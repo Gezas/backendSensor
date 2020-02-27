@@ -44,10 +44,8 @@ patientRouter.route("/:id").get((req, res) => {
 // Create a new Patient
 patientRouter.route("/").post((req, res) => {
     let patient = new PATIENT(req.body);
-
     // Creation date assigned on server-side
-    patient.dateCreated = new Date();
-    
+    patient.dateCreated = new Date();    
     patient.save().then(saved => {
         res.status(201).json(saved);
     }).catch(err => {
@@ -55,29 +53,24 @@ patientRouter.route("/").post((req, res) => {
     });
 });
 
-// Modify a patient
-patientRouter.route("/:id").put((req, res) => {
-    PATIENT.findById(req.params.id, (err, result) => {
-        result.fullName = req.body.fullName;
-        result.dob = req.body.fullName;
-
-        result.save().then(saved => {
-            res.status(200).json(saved);
-        }).catch(err => {
-            res.status(400).send();
-        });
+//Modify a patient
+patientRouter.put('/:id', (req, res) => {
+    PATIENT.findByIdAndUpdate({_id: req.params.id},req.body)
+      .then(function(){
+        PATIENT.findOne({_id: req.params.id}).then(function(patient){
+          res.json(patient._id);
+        })
+      })
+      .catch(err => {
+        res.status(400).send();
     });
 });
 
 // Delete a patient
-patientRouter.route("/:id").delete((req, res) => {
-    PATIENT.findByIdAndDelete(req.params.id, (err, result) => {
-        if (err) {
-            res.status(404).send();
-        } else {
-            res.status(200).send();
-        }
-    });
-});
+patientRouter.delete('/:id', (req, res) => {
+    PATIENT.findById(req.params.id)
+      .then(patient => patient.remove().then(() => res.status(200).send()))
+      .catch(err => res.status(404).send());
+  });
 
 module.exports = patientRouter;

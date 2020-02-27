@@ -2,6 +2,9 @@ const doctorRouter = require('express').Router();
 const DOCTOR = require('../model/DoctorModel');
 const PATIENT = require('../model/PatientModel');
 const bcrypt = require('bcrypt');
+const config = require('config');
+const jwt = require('jsonwebtoken');
+const auth = require('../middleware/auth');
 
 // Get all doctors
 doctorRouter.route("/").get((req, res) => {
@@ -15,14 +18,11 @@ doctorRouter.route("/").get((req, res) => {
 });
 
 // Get one doctor
-doctorRouter.route("/:id").get((req, res) => {
-    DOCTOR.findById(req.params.id, (err, result) => {
-        if (err || !result) {
-            res.status(404).send();
-        } else {
-            res.status(200).json(result);
-        }
-    });
+doctorRouter.get('/doctor', auth, (req,res) => {
+    DOCTOR.findById(req.user.name)
+        //Get the user without password
+        .select('-password')
+        .then(doctor => res.json(doctor));
 });
 
 // Create a new Doctor
@@ -44,19 +44,40 @@ doctorRouter.route("/").post((req, res) => {
 
 // Authenticate a Doctor
 doctorRouter.route("/auth").post((req, res) => {
-    DOCTOR.findOne({username: req.body.username}, (err, result) => {
-        if (err || !result) {
-            res.status(404).send();
-        } else {
-            bcrypt.compare(req.body.password, result.password, (err, isValid) => {
-                if (isValid) {
-                    res.status(200).json(result);
-                } else {
-                    res.status(404).send();
-                }
-            });
-        }
-    });
+    const { name, password } = req.body;
+    //Validation check
+    if(!name || !password) {
+        return res.status(400).json({ msg: 'Fields Empty!Please enter all the fields'});
+    }
+    //Check existing user
+    DOCTOR.findOne({ name })
+        .then(doctor => {
+            if(!doctor) return res.status(400).json({msg: 'User cannot be found' });
+            //Check hash password
+            bcrypt.compare(req.body.password, user.password)
+                .then(isMatch => {
+                    if(!isMatch) return res.status(400).json({ msg: 'Invalid credentials' });                    
+                    jwt.sign(
+                        { id: user.id },
+                        config.get('jwtSecret'),
+                        { expiresIn: 3600 },
+                        (err, token) => {
+                            if(err) throw err; 
+                            res.json({
+                                token,
+                                doctor: {
+                                    id: doctor.id,
+                                    username: doctor.username,
+                                    fullName: doctor.fullName,
+                                    dob: doctor.dob,
+                                    dateCreated: doctor.dateCreated,
+                                    patients: doctor.patients
+                                }
+                            });
+                        }
+                    )
+                })
+         })
 });
 
 // Modify a doctor alltogether

@@ -17,7 +17,7 @@ app.set("port", process.env.PORT || 5000);
 
 // Mongoose
 mongoose.connect(
-    "mongodb://localhost:27017/tmsdb",
+    "mongodb://localhost:27017/csisddb",
     { useNewUrlParser: true,
     useUnifiedTopology: true }
 );
