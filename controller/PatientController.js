@@ -73,4 +73,18 @@ patientRouter.delete('/:id', (req, res) => {
       .catch(err => res.status(404).send());
   });
 
+// update patient's health data 
+patientRouter.post('/data', (req, res) => {
+    PATIENT.findOne({deviceId : req.body.deviceId})
+        .then((patient) => {
+            patient.healthData.push(req.body.healthData);
+            patient.save()
+                .then(saved => {
+                    res.status(201).json(saved);})
+                .catch(err => {
+                    res.status(400).send();
+                });
+        });
+});
+
 module.exports = patientRouter;

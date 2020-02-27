@@ -14,6 +14,12 @@ const patientSchema = new mongoose.Schema({
     dateCreated: {
         type: Date,
         required: true
+    },
+    healthData: {
+        type: [mongoose.Schema.Types.ObjectId]
+    },
+    deviceId:{
+        type: String
     }
 });
 
