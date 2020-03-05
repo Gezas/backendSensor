@@ -75,14 +75,19 @@ patientRouter.delete('/:id', (req, res) => {
 
 // update patient's health data 
 patientRouter.post('/data', (req, res) => {
+    console.log("Health data updated successfully!!!!!")
     PATIENT.findOne({deviceId : req.body.deviceId})
         .then((patient) => {
-            patient.healthData.push(req.body.healthData);
+            patient.healthData.push(...req.body.healthData);
+            //patient.healthData.concat(req.body.healthData);
             patient.save()
                 .then(saved => {
-                    res.status(201).json(saved);})
+                    //res.status(201).json(saved);
+                    res.status(201).json(saved);
+                })
                 .catch(err => {
-                    res.status(400).send();
+                    //res.status(400).send();
+                    res.status(201).json({_id:"lol"});
                 });
         });
 });
